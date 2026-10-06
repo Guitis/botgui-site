@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BotGui - Integração com IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#0b0f19',
+                            dark: '#111827'
+                        },
+                        brand: {
+                            green: '#22c55e',
+                            greenHover: '#16a34a',
+                            blue: '#2563eb',
+                            purple: '#7c3aed',
+                            lightBlue: '#dbeafe'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .chat-bubble-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+        }
+        .custom-shadow {
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.07);
+        }
+        /* Pulse Animation */
+        @keyframes pulse-subtle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .animate-pulse-subtle {
+            animation: pulse-subtle 4s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+
+    <!-- HERO SECTION -->
+    <section class="hero-bg text-white relative overflow-hidden">
+        <!-- Top Nav -->
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between border-b border-slate-800/60 relative z-20">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2">
+                    <!-- BotGui Logo Text -->
+                    <span class="text-2xl font-extrabold tracking-tight text-white">Bot<span class="text-blue-500">Gui</span></span>
+                    <!-- Small Robot Icon Side-by-Side -->
+                    <div class="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
+                        <i class="fa-solid fa-robot text-base"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 text-xs font-semibold tracking-wider text-slate-300 uppercase bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700/60">
+                <i class="fa-brands fa-meta text-blue-400 text-sm"></i>
+                <span>Meta Business Partners</span>
+            </div>
+        </nav>
+
+        <!-- Hero Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24 lg:pt-16 lg:pb-32 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Text Left -->
+                <div class="lg:col-span-6 space-y-6 text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/90 border border-slate-700 text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                        <span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
+                        CHATBOT COM IA PARA ATENDIMENTO
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight text-white">
+                        Agentes de IA personalizados para atendimento ao cliente 24h por dia, com contexto e agilidade.
+                    </h1>
+
+                    <p class="text-lg text-slate-300 leading-relaxed max-w-xl">
+                        Atenda alto volume de conversas com contexto e agilidade, 24 horas por dia e sem aumentar o time.
+                    </p>
+
+                    <div class="pt-2 flex flex-col sm:flex-row gap-4">
+                        <a href="#contato" class="inline-flex items-center justify-center gap-3 px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-base rounded-full transition-all transform hover:-translate-y-0.5 shadow-lg shadow-emerald-500/30">
+                            <span>Quero falar com especialista</span>
+                            <i class="fa-brands fa-whatsapp text-xl"></i>
+                        </a>
+                    </div>
+                    <p class="text-xs text-slate-400 flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-amber-400"></i> Atendimento imediato via WhatsApp
+                    </p>
+                </div>
+
+                <!-- Hero Graphic Mockup Right -->
+                <div class="lg:col-span-6 relative">
+                    <div class="relative mx-auto max-w-md lg:max-w-none">
+                        
+                        <!-- Floating Live Chat Callouts -->
+                        <div class="absolute -top-6 -left-6 z-30 bg-white/95 text-slate-800 p-3.5 rounded-2xl custom-shadow max-w-xs border border-slate-100 hidden sm:block animate-pulse-subtle">
+                            <p class="text-xs font-medium text-slate-600">Olá, Preciso de ajuda</p>
+                            <div class="mt-1 pt-1 border-t border-slate-100 text-[11px] text-slate-500">
+                                Recebi o produto, mas veio errado. Como solicito troca?
+                            </div>
+                        </div>
+
+                        <div class="absolute top-24 -left-10 z-30 bg-purple-900/90 text-white p-3.5 rounded-2xl custom-shadow max-w-xs border border-purple-500/30 hidden sm:block">
+                            <p class="text-xs">Olá! Boa tarde! Você poderia me passar o número do seu pedido?</p>
+                            <span class="inline-block mt-1 text-[10px] text-purple-300"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Agente BotGui respondeu em 0.2s</span>
+                        </div>
+
+                        <!-- Main Dashboard Mockup Box -->
+                        <div class="bg-slate-900 border border-slate-700/80 rounded-2xl overflow-hidden shadow-2xl">
+                            <!-- Window Bar -->
+                            <div class="bg-slate-800/80 px-4 py-3 border-b border-slate-700/80 flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-3 h-3 bg-red-500 rounded-full inline-block"></span>
+                                    <span class="w-3 h-3 bg-yellow-500 rounded-full inline-block"></span>
+                                    <span class="w-3 h-3 bg-green-500 rounded-full inline-block"></span>
+                                </div>
+                                <span class="text-xs text-slate-400 font-medium">WhatsApp Business BotGui IA</span>
+                            </div>
+
+                            <!-- Inside Mockup Layout -->
+                            <div class="p-4 bg-slate-950/60 text-slate-200 grid grid-cols-12 gap-3 text-xs">
+                                <!-- Sidebar -->
+                                <div class="col-span-4 border-r border-slate-800 pr-3 space-y-2">
+                                    <div class="font-bold text-slate-300 pb-1 border-b border-slate-800">Todas as conversas</div>
+                                    <div class="bg-blue-600/20 p-2 rounded-lg border border-blue-500/30">
+                                        <div class="font-semibold text-white">Viviane Ap.</div>
+                                        <div class="text-[10px] text-slate-400 truncate">✔ Que bom que você me...</div>
+                                    </div>
+                                    <div class="p-2 rounded-lg bg-slate-900/50">
+                                        <div class="font-semibold text-slate-300">Marcos S.</div>
+                                        <div class="text-[10px] text-slate-500 truncate">Oi! Fico feliz em ouvir...</div>
+                                    </div>
+                                    <div class="p-2 rounded-lg bg-slate-900/50">
+                                        <div class="font-semibold text-slate-300">Esther F.</div>
+                                        <div class="text-[10px] text-slate-500 truncate">Como estão as coisas?...</div>
+                                    </div>
+                                </div>
+
+                                <!-- Chat Active Area -->
+                                <div class="col-span-8 flex flex-col justify-between space-y-3">
+                                    <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+                                        <span class="font-semibold text-white">Esmalteria Pink</span>
+                                        <span class="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">Atendido por IA</span>
+                                    </div>
+                                    
+                                    <div class="space-y-2 py-2">
+                                        <div class="bg-slate-800/80 p-2.5 rounded-lg max-w-[85%] text-slate-200">
+                                            Olá! Gostaria de mais informações sobre a plataforma BotGui.
+                                        </div>
+                                        <div class="bg-blue-600 p-2.5 rounded-lg max-w-[85%] ml-auto text-white">
+                                            Com certeza, Esmalteria Pink! O BotGui integra seus canais com agentes de IA qualificados.
+                                        </div>
+                                    </div>
+
+                                    <div class="pt-2 border-t border-slate-800 flex items-center gap-2">
+                                        <input type="text" placeholder="Escreva uma mensagem..." class="w-full bg-slate-900 border border-slate-700 text-xs rounded px-2.5 py-1.5 focus:outline-none" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SOCIAL PROOF LOGO BAR -->
+    <section class="bg-white py-10 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-xs font-semibold uppercase tracking-wider text-slate-400 mb-6">Empresas que confiam na nossa tecnologia</p>
+            <div class="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-70 grayscale hover:grayscale-0 transition-all duration-300">
+                <a href="https://esmalteriapink.com.br/" target="_blank" rel="noopener noreferrer">
+                <span class="text-xl font-extrabold text-blue-900 italic">Esmalteria Pink</span>
+                </a>
+
+                <a href="https://www.instagram.com/estherfiorillo.psi/" target="_blank" rel="noopener noreferrer">
+                <span class="text-xl font-extrabold text-blue-900 italic">estherfiorillo.psi</span>
+                </a>
+                
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: FEATURE GRID -->
+    <section class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            
+            <span class="text-xs font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
+                BOTGUI IA DA NOVA GERAÇÃO
+            </span>
+
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-4 mb-4">
+                Tudo centralizado. Com o seu agente de IA personalizado resolvendo por você.
+            </h2>
+
+            <div class="mb-12">
+                <a href="#contato" class="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-full transition-all shadow-md">
+                    <span>Quero centralizar meu atendimento</span>
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                </a>
+            </div>
+
+            <!-- 3 Cards Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                
+                <!-- Card 1 -->
+                <div class="bg-white rounded-3xl p-8 border border-slate-200/80 custom-shadow flex flex-col justify-between hover:border-blue-300 transition-all">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3 text-center">
+                            Todos os canais, uma tela só
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed text-center mb-6">
+                            WhatsApp, Instagram, Messenger, e-mail e chat do site centralizados em uma interface única. Histórico completo do cliente em cada conversa.
+                        </p>
+                    </div>
+                    <!-- Card Illustration Mockup -->
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-2 mt-4">
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-emerald-500 text-lg"></i>
+                                <span class="text-xs font-bold text-slate-700">Esmalteria Pink</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400">45 min</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-blue-200 flex items-center justify-between ring-2 ring-blue-500/10">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-brands fa-instagram text-pink-500 text-lg"></i>
+                                <span class="text-xs font-bold text-slate-800">estherfiorillo.psi</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400">1h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white rounded-3xl p-8 border border-slate-200/80 custom-shadow flex flex-col justify-between hover:border-blue-300 transition-all">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3 text-center">
+                            Seu agente de IA resolvendo por você, 24h por dia
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed text-center mb-6">
+                            O BotGui usa a base de conhecimento da sua empresa e as habilidades e serviços que você configurou para resolver atendimentos sem intervenção humana.
+                        </p>
+                    </div>
+                    <!-- Smartphone Chat Mockup -->
+                    <div class="bg-slate-900 p-4 rounded-3xl border-4 border-slate-800 shadow-lg text-white max-w-xs mx-auto w-full space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <span class="text-xs font-bold text-emerald-400 flex items-center gap-1">
+                                <i class="fa-brands fa-whatsapp"></i> WhatsApp Esmalteria Pink
+                            </span>
+                            <span class="text-[10px] text-slate-400">BotGui IA</span>
+                        </div>
+                        <div class="bg-emerald-100 text-slate-800 p-2.5 rounded-xl text-xs">
+                            Ainda tem horário de atendimento pra hoje??
+                        </div>
+                        <div class="bg-purple-100 text-purple-950 p-2.5 rounded-xl text-xs ml-auto max-w-[90%] font-medium">
+                            Me informe o procedimento que gostaria de realizar. Que já verifico para você os horários disponíveis. 🗓️
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white rounded-3xl p-8 border border-slate-200/80 custom-shadow flex flex-col justify-between hover:border-blue-300 transition-all">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3 text-center">
+                            Você vê tudo acontecendo em tempo real
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed text-center mb-6">
+                            TMA, volume, SLA e produtividade do time em um painel. Sua operação ganha inteligência com dados que orientam decisões.
+                        </p>
+                    </div>
+                    <!-- Pie Chart / Metrics Mockup -->
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-4">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-slate-700">Conversas abertas</span>
+                            <span class="text-lg font-black text-slate-900">80</span>
+                        </div>
+                        <!-- Simulated Donut Chart -->
+                        <div class="relative w-28 h-28 mx-auto rounded-full border-8 border-teal-500 border-t-purple-600 border-r-slate-300 flex items-center justify-center">
+                            <span class="text-xs font-bold text-slate-600">76% IA</span>
+                        </div>
+                        <div class="space-y-1.5 text-[11px]">
+                            <div class="flex items-center justify-between text-slate-600">
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-teal-500"></span> Atendimento com o BotGui</span>
+                                <span class="font-bold">61</span>
+                            </div>
+                            <div class="flex items-center justify-between text-slate-600">
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span> Em atendimento humano</span>
+                                <span class="font-bold">8</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: PROCESS & EXECUTION -->
+    <section class="py-20 bg-white border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Você ensina uma vez. O BotGui executa em toda conversa.</p>
+            
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-6">
+                Seu negócio tem processos.<br>O agente de IA aprende e executa.
+            </h2>
+
+            <div class="mb-12">
+                <a href="#contato" class="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-full transition-all shadow-md">
+                    <span>Quero resolver automaticamente</span>
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                </a>
+            </div>
+
+            <!-- 3 Process Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                
+                <!-- Process Card 1 -->
+                <div class="bg-white rounded-3xl p-8 border border-slate-200/90 custom-shadow flex flex-col justify-between hover:shadow-xl transition-all">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3 text-center">
+                            Configure uma habilidade e todos os agentes passam a usá-la
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed text-center mb-8">
+                            Ensine o BotGui a consultar um sistema, gerar um documento ou verificar uma informação. A partir daí, qualquer agente executa essa ação.
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-center gap-3 pt-4 border-t border-slate-100">
+                        <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm"><i class="fa-solid fa-user"></i></div>
+                        <div class="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center text-lg shadow-lg ring-4 ring-purple-100"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm"><i class="fa-solid fa-user"></i></div>
+                    </div>
+                </div>
+
+                <!-- Process Card 2 -->
+                <div class="bg-white rounded-3xl p-8 border border-slate-200/90 custom-shadow flex flex-col justify-between hover:shadow-xl transition-all">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3 text-center">
+                            Ele sabe o que sua empresa sabe
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed text-center mb-8">
+                            Carregue sua base de conhecimento — perguntas frequentes, políticas, procedimentos. O BotGui responde com as informações exatas, sem respostas genéricas.
+                        </p>
+                    </div>
+                    <div class="relative w-32 h-24 mx-auto bg-slate-50 rounded-2xl border border-slate-200 p-4 flex flex-col justify-center space-y-2">
+                        <div class="h-2 bg-blue-600 rounded w-3/4"></div>
+                        <div class="h-2 bg-blue-400 rounded w-full"></div>
+                        <div class="h-2 bg-blue-200 rounded w-1/2"></div>
+                        <div class="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs shadow-md">
+                            <i class="fa-solid fa-rotate"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Process Card 3 -->
+                <div class="bg-white rounded-3xl p-8 border border-slate-200/90 custom-shadow flex flex-col justify-between hover:shadow-xl transition-all">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3 text-center">
+                            Quando o cliente precisa de humano, o BotGui já preparou tudo
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed text-center mb-8">
+                            O BotGui identifica quando a conversa precisa de um atendente e faz o transbordo na hora certa. Sugere resumos prontos para o operador humano.
+                        </p>
+                    </div>
+                    <div class="flex items-center justify-center gap-2 pt-4">
+                        <div class="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center text-lg shadow-md"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <div class="w-10 h-10 rounded-full bg-purple-800 text-white flex items-center justify-center text-sm"><i class="fa-solid fa-headset"></i></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: INTERACTIVE FAQ ACCORDION -->
+    <section class="py-20 bg-slate-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-xs font-bold text-blue-600 uppercase tracking-widest bg-blue-100 px-3 py-1 rounded-full">
+                    DÚVIDAS
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-4 mb-2">
+                    Perguntas frequentes
+                </h2>
+                <p class="text-sm text-slate-600">
+                    Respondemos aqui as dúvidas mais frequentes, com total transparência.
+                </p>
+            </div>
+
+            <!-- FAQ Accordion List -->
+            <div class="space-y-4">
+                
+                <!-- FAQ Item 1 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden custom-shadow transition-all">
+                    <button onclick="toggleFaq('faq-1')" class="w-full px-6 py-5 text-left font-bold text-slate-800 flex items-center justify-between focus:outline-none hover:bg-slate-50">
+                        <span class="text-base sm:text-lg">01. Quanto custa?</span>
+                        <div id="icon-faq-1" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-sm transition-transform">
+                            +
+                        </div>
+                    </button>
+                    <div id="faq-1" class="hidden px-6 pb-6 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                        Os planos do BotGui são personalizados de acordo com o volume de mensagens e o número de canais da sua empresa. Entre em contato com nossos especialistas para receber um orçamento sob medida.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden custom-shadow transition-all">
+                    <button onclick="toggleFaq('faq-2')" class="w-full px-6 py-5 text-left font-bold text-slate-800 flex items-center justify-between focus:outline-none hover:bg-slate-50">
+                        <span class="text-base sm:text-lg">02. É diferente de chatbot? como assim?</span>
+                        <div id="icon-faq-2" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-sm transition-transform">
+                            +
+                        </div>
+                    </button>
+                    <div id="faq-2" class="hidden px-6 pb-6 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                        Sim! Chatbots tradicionais seguem apenas regras rígidas de "clique em 1 ou 2". Os Agentes de IA do BotGui entendem linguagem natural, interpretam o contexto do cliente, consultam sua base de conhecimento e resolvem problemas de forma autônoma.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden custom-shadow transition-all">
+                    <button onclick="toggleFaq('faq-3')" class="w-full px-6 py-5 text-left font-bold text-slate-800 flex items-center justify-between focus:outline-none hover:bg-slate-50">
+                        <span class="text-base sm:text-lg">03. Preciso de equipe de TI para configurar as habilidades?</span>
+                        <div id="icon-faq-3" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-sm transition-transform">
+                            +
+                        </div>
+                    </button>
+                    <div id="faq-3" class="hidden px-6 pb-6 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                        Não! Nossa plataforma foi desenvolvida no modelo no-code/low-code. Além disso, nossa equipe de onboarding realiza todo o treinamento e configuração inicial para a sua empresa.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden custom-shadow transition-all">
+                    <button onclick="toggleFaq('faq-4')" class="w-full px-6 py-5 text-left font-bold text-slate-800 flex items-center justify-between focus:outline-none hover:bg-slate-50">
+                        <span class="text-base sm:text-lg">04. E quando o BotGui não souber responder?</span>
+                        <div id="icon-faq-4" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-sm transition-transform">
+                            +
+                        </div>
+                    </button>
+                    <div id="faq-4" class="hidden px-6 pb-6 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                        Sempre que a IA identificar um nível de dúvida que exige intervenção humana, ela transfere automaticamente o atendimento para o seu time com um resumo completo do contexto.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden custom-shadow transition-all">
+                    <button onclick="toggleFaq('faq-5')" class="w-full px-6 py-5 text-left font-bold text-slate-800 flex items-center justify-between focus:outline-none hover:bg-slate-50">
+                        <span class="text-base sm:text-lg">05. Para quem é indicado?</span>
+                        <div id="icon-faq-5" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-sm transition-transform">
+                            +
+                        </div>
+                    </button>
+                    <div id="faq-5" class="hidden px-6 pb-6 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
+                        Para pequenas, médias e grandes empresas que possuem atendimento no WhatsApp, Instagram, Saas, Academias, Clínicas, Salões de Estética e serviços que desejam escalar vendas e atendimento sem aumentar custos operacionais.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: LEAD CAPTURE FORM SECTION (Light Blue Background) -->
+    <section id="contato" class="py-20 bg-[#D8E5FB]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                
+                <!-- Left Info Box -->
+                <div class="lg:col-span-5 space-y-6 pt-4">
+                    <span class="inline-block px-3 py-1 bg-slate-900 text-white font-bold text-xs rounded-full uppercase tracking-wider">
+                        FALE CONOSCO
+                    </span>
+                    
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
+                        Quer saber mais?
+                    </h2>
+
+                    <p class="text-slate-700 leading-relaxed text-base">
+                        Do primeiro contato ao helpdesk: gerencie conversas, qualifique leads e resolva chamados com agentes de IA. Tudo na mesma plataforma.
+                    </p>
+
+                    <div class="pt-6 space-y-4 text-slate-800 text-sm font-semibold">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-600/20 flex items-center justify-center text-blue-700">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <span>Demonstração prática ao vivo</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-600/20 flex items-center justify-center text-blue-700">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <span>Análise do seu volume de atendimento</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-600/20 flex items-center justify-center text-blue-700">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <span>Proposta de ROI personalizada</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Form Box -->
+                <div class="lg:col-span-7 bg-white rounded-3xl p-8 sm:p-10 custom-shadow border border-slate-200">
+                    <form onsubmit="handleSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nome e sobrenome *</label>
+                            <input type="text" required placeholder="Seu nome completo" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white focus:outline-none transition-all">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">E-mail corporativo *</label>
+                            <input type="email" required placeholder="voce@suaempresa.com.br" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white focus:outline-none transition-all">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Site *</label>
+                            <input type="text" required placeholder="suaempresa.com.br" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white focus:outline-none transition-all">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Quantos funcionários há na empresa? *</label>
+                                <select required class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white focus:outline-none transition-all text-slate-600">
+                                    <option value="">Selecione...</option>
+                                    <option value="1-10">1 a 10</option>
+                                    <option value="11-50">11 a 50</option>
+                                    <option value="51-200">51 a 200</option>
+                                    <option value="200+">Mais de 200</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Qual seu cargo? *</label>
+                                <select required class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white focus:outline-none transition-all text-slate-600">
+                                    <option value="">Selecione...</option>
+                                    <option value="Diretor">Sócio / Diretor</option>
+                                    <option value="Gerente">Gerente / Coordenador</option>
+                                    <option value="Analista">Analista / Operacional</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Número de WhatsApp *</label>
+                            <div class="flex gap-2">
+                                <div class="px-3 py-3 bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold flex items-center gap-1">
+                                    <span>🇧🇷</span> <span>+55</span>
+                                </div>
+                                <input type="tel" required placeholder="(11) 99999-9999" class="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white focus:outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-2 pt-2">
+                            <input type="checkbox" id="consent" required class="mt-1 rounded text-blue-600 focus:ring-blue-500 border-slate-300">
+                            <label for="consent" class="text-[11px] text-slate-500 leading-tight">
+                                Concordo em receber outras comunicações da BotGui via e-mail e/ou WhatsApp.
+                            </label>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-slate-300 hover:bg-slate-800 hover:text-white font-bold text-sm text-slate-700 rounded-xl transition-all shadow-sm">
+                            Enviar
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: DARK CTA FOOTER BANNER -->
+    <footer class="bg-[#0f172a] text-white py-20 relative overflow-hidden border-t border-slate-800">
+        <div class="max-w-5xl mx-auto px-4 text-center relative z-10 space-y-6">
+            
+            <!-- Robot Logo Center -->
+            <div class="w-16 h-16 rounded-2xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center mx-auto text-blue-400 text-3xl shadow-xl">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+
+            <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white max-w-3xl mx-auto leading-tight">
+                Não deixe nenhuma venda escapar fora do horário comercial.
+            </h2>
+
+            <p class="text-slate-400 text-sm max-w-xl mx-auto">
+                Gere mais oportunidades de vendas e aumente a capacidade de atendimento do seu time sem precisar aumentar o tamanho da sua equipe.
+            </p>
+
+            <div>
+                <a href="#contato" class="inline-flex items-center gap-3 px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-base rounded-full transition-all shadow-xl shadow-emerald-500/20">
+                    <span>Quero parar de perder atendimentos</span>
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                </a>
+            </div>
+
+            <p class="text-xs text-slate-500 pt-2">Via WhatsApp • Sem formulário longo • Resposta em minutos</p>
+
+            <!-- Bottom Sub-Logo Bar -->
+            <div class="pt-12 border-t border-slate-800/80 mt-12">
+                <p class="text-[11px] text-slate-500 uppercase tracking-widest mb-6">A tecnologia por trás das maiores operações de atendimento do país</p>
+                <div class="flex flex-wrap items-center justify-center gap-8 opacity-40 text-slate-400 font-bold text-sm">
+                    <span>Esmalteria Pink</span>
+                    <span>estherfiorillo.psi</span>
+                </div>
+                <p class="text-xs text-slate-600 mt-8">&copy; 2026 BotGui Tecnologia S.A. Todos os direitos reservados.</p>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Widget -->
+    <a href="https://wa.me/5500000000000" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-2xl transition-all transform hover:scale-110">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- FAQ Toggle & Form Handler JavaScript -->
+    <script>
+        function toggleFaq(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.innerText = '−';
+                icon.classList.add('bg-blue-600', 'text-white');
+            } else {
+                content.classList.add('hidden');
+                icon.innerText = '+';
+                icon.classList.remove('bg-blue-600', 'text-white');
+            }
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            alert('Obrigado! Suas informações foram enviadas. Nossa equipe entrará em contato em instantes.');
+        }
+    </script>
+</body>
+</html>
